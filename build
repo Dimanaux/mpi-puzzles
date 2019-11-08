@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+mpic++ "src/$@.cpp" -o "out/$@.out"

@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+while [ -n "$1" ]; do
+    case "$1" in
+    -n)
+        n="$2"
+        shift
+        ;;
+    *) file=$1 ;;
+    esac
+    shift
+done
+
+NP=${n:=2}
+
+mpirun -np $NP "out/$file.out"
