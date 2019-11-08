@@ -15,7 +15,6 @@
  */
 int main(int argc, char **argv)
 {
-    int nPr, size;
     MPI_Init(&argc, &argv);
     printf("Hello, world!\n");
     MPI_Finalize();
