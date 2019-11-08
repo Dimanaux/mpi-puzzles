@@ -13,4 +13,17 @@ done
 
 NP=${n:=2}
 
-mpirun -np $NP "out/$file.out"
+if [ -z "$file" ]; then
+    printf "Usage: $0 [OPTION]... [PUZZLE NUMBER]...\n"
+    printf "Options:\n"
+    printf "  -n=NUM        Run puzzle on NUM processes.\n"
+    printf "                If omitted, NUM=2 is used by default\n"
+    printf "Examples:\n"
+    printf "  $0 01         Runs puzzle 01 on 2 processes\n"
+    printf "  $0 -n 4 02    Runs puzzle 02 on 4 processes\n"
+else
+    if [ ! -f "out/$file.out" ]; then
+        ./build $file
+    fi
+    mpirun -np $NP "out/$file.out"
+fi
