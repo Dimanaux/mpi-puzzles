@@ -1,3 +1,7 @@
 #!/usr/bin/env bash
 
-mpic++ "src/$@.cpp" -o "out/$@.out"
+if [ -z "$@" ]; then
+    echo "Usage: $0 [PUZZLE NUMBER]"
+else
+    mpic++ "src/$@.cpp" -o "out/$@.out" -std=c++11
+fi
