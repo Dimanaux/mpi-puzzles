@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 if [ -z "$@" ]; then
-    echo "Usage: $0 [PUZZLE NUMBER]"
+    printf "Usage: $0 [PUZZLE NUMBER]\nExample: $0 01\n"
 else
     mpic++ "src/$@.cpp" -o "out/$@.out" -std=c++11
 fi
