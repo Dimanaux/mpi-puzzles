@@ -9,6 +9,7 @@ using std::to_string;
 const int ARRAY_MAX_VALUE = 128;
 
 int *randomArray(int);
+float *randomFloatArray(int);
 string toString(int *, int);
 void setSeed();
 
@@ -23,6 +24,17 @@ int *randomArray(int size)
     for (int i = 0; i < size; i++)
     {
         array[i] = (rand() % ARRAY_MAX_VALUE) + 1;
+    }
+    return array;
+}
+
+float *randomFloatArray(int size)
+{
+    setSeed();
+    float *array = new float[size];
+    for (int i = 0; i < size; i++)
+    {
+        array[i] = ((rand() % ARRAY_MAX_VALUE) + 1.0f) / ARRAY_MAX_VALUE;
     }
     return array;
 }
