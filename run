@@ -25,5 +25,5 @@ else
     if [ ! -f "out/$file.out" ]; then
         ./build $file
     fi
-    mpirun -np $NP "out/$file.out"
+    mpirun --hostfile .hostfile -np $NP "out/$file.out"
 fi
