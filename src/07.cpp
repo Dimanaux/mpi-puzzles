@@ -17,13 +17,13 @@ int main(int argc, int **argv)
  
     int chunk_size = ARRAY_SIZE / (size - 1);
     bool remains = (size - 1) * chunk_size == ARRAY_SIZE;
+    MPI_Status status;
 
     if (rank == 0)
     {
         float *x = randomFloatArray(ARRAY_SIZE);
         float *y = randomFloatArray(ARRAY_SIZE);
         float *z = new float[ARRAY_SIZE];
-        MPI_Status status;
 
         // a) z = Ax + By
         for (int i = 1; i < size; i++)
@@ -79,7 +79,6 @@ int main(int argc, int **argv)
         float *x = new float[chunk_size];
         float *y = new float[chunk_size];
         float *z = new float[chunk_size];
-        MPI_Status status;
 
         // a) z = Ax + By
         MPI_Recv(x, chunk_size, MPI_FLOAT, 0, 99, MPI_COMM_WORLD, &status);
@@ -127,4 +126,3 @@ int main(int argc, int **argv)
 
     MPI_Finalize();
 }
-
