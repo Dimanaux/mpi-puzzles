@@ -8,7 +8,7 @@ const int MATRIX_ROWS = 6;
 const int MATRIX_COLS = MATRIX_ROWS;
 const int MATRIX_SIZE = MATRIX_ROWS * MATRIX_COLS;
 
-int main(int argc, int **argv) {
+int main(int argc, char **argv) {
     int rank, size;
     MPI_Init(&argc, &argv);
     MPI_Comm_size(MPI_COMM_WORLD, &size);
@@ -45,7 +45,7 @@ int main(int argc, int **argv) {
         }
 
         // c. transpose. Too difficult and meaningless
-        b = transpose(a);
+        b = transpose(a, MATRIX_ROWS, MATRIX_COLS);
 
         // d. Gauss method. Impossible
     } else {
@@ -78,4 +78,3 @@ int main(int argc, int **argv) {
 
     MPI_Finalize();
 }
-

@@ -6,7 +6,7 @@
 using std::string;
 using std::to_string;
 
-const int ARRAY_MAX_VALUE = 128;
+const int MAX_RANDOM_VALUE = 128;
 
 int *randomArray(int);
 float *randomFloatArray(int);
@@ -17,21 +17,60 @@ void logGot(int, string);
 void logSent(int, string);
 void log(int, string, string);
 
-int* randomArray(int size) {
+int randomInt() {
     setSeed();
-    int *array = new int[size];
-    for (int i = 0; i < size; i++)
-    {
-        array[i] = (rand() % ARRAY_MAX_VALUE) + 1;
+    return (rand() % MAX_RANDOM_VALUE) + 1;
+}
+
+float randomFloat() {
+    return ((float) randomInt()) / MAX_RANDOM_VALUE;
+}
+
+int* randomArray(int size) {
+    int* array = new int[size];
+    for (int i = 0; i < size; i++) {
+        array[i] = randomInt();
     }
     return array;
 }
 
+float* randomFloatArray(int size) {
+    setSeed();
+    float* array = new float[size];
+    for (int i = 0; i < size; i++) {
+        array[i] = randomFloat();
+    }
+    return array;
+}
+
+template<typename T>
+string toString(T* array, int size) {
+    if (size == 0) {
+        return "[]";
+    }
+    string string = "[" + to_string(array[0]);
+    for (int i = 1; i < size; i++) {
+        string += ", " + to_string(array[i]);
+    }
+    return string + "]";
+}
+
+float** newMatrix(int rows, int cols) {
+    float* row = (float*) malloc(rows * cols * sizeof(float));
+    float** matrix = (float**) malloc(rows * sizeof(float*));
+    for (int i=0; i<rows; i++) {
+        matrix[i] = &(row[cols * i]);
+    }
+    return matrix;
+}
+
 float** randomMatrix(int rows, int cols) {
     setSeed();
-    float** matrix = new float*[rows];
+    float** matrix = newMatrix(rows, cols);
     for (int i = 0; i < rows; i++) {
-        matrix[i] = randomFloatArray(cols);
+        for (int j = 0; j < cols; j++) {
+            matrix[i][j] = randomFloat();
+        }
     }
     return matrix;
 }
@@ -47,25 +86,16 @@ float** transpose(float** matrix, int rows, int cols) {
     return transposed;
 }
 
-float* randomFloatArray(int size) {
-    setSeed();
-    float* array = new float[size];
-    for (int i = 0; i < size; i++) {
-        array[i] = ((rand() % ARRAY_MAX_VALUE) + 1.0f) / ARRAY_MAX_VALUE;
-    }
-    return array;
-}
-
-template<typename T>
-string toString(T* array, int size) {
-    if (size == 0) {
+string toString(float** matrix, int rows, int cols) {
+    if (rows == 0) {
         return "[]";
     }
-    string string = "[" + to_string(array[0]);
-    for (int i = 1; i < size; i++) {
-        string += ", " + to_string(array[i]);
+    string s = "[" + toString(matrix[0], cols);
+    for (int i = 1; i < rows; i++) {
+        s += ",\n " + toString(matrix[i], cols);
     }
-    return string + "]";
+    s += "]";
+    return s;
 }
 
 bool seed_is_set = false;
