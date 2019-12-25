@@ -18,30 +18,29 @@ int main(int argc, char **argv) {
     MPI_Status status;
 
     if (rank == 0) {
-
         float** a = randomMatrix(MATRIX_ROWS, MATRIX_COLS);
         float** b = randomMatrix(MATRIX_ROWS, MATRIX_COLS);
         float** c = randomMatrix(MATRIX_ROWS, MATRIX_COLS);
 
         // a. c = a * b (C[i][j] = A[i][j] * B[i][j])
         for (int i = 1; i < size; i++) {
-            MPI_Send(a + (i - 1) * chunk_size, chunk_size, MPI_FLOAT, i, 99, MPI_COMM_WORLD);
-            MPI_Send(b + (i - 1) * chunk_size, chunk_size, MPI_FLOAT, i, 99, MPI_COMM_WORLD);
+            MPI_Send(*a + (i - 1) * chunk_size, chunk_size, MPI_FLOAT, i, 99, MPI_COMM_WORLD);
+            MPI_Send(*b + (i - 1) * chunk_size, chunk_size, MPI_FLOAT, i, 99, MPI_COMM_WORLD);
         }
 
         for (int i = 1; i < size; i++) {
-            MPI_Recv(c + (i - 1) * chunk_size, chunk_size, MPI_FLOAT, i, 99, MPI_COMM_WORLD, &status);
+            MPI_Recv(*c + (i - 1) * chunk_size, chunk_size, MPI_FLOAT, i, 99, MPI_COMM_WORLD, &status);
         }
 
         // b. c = a * b
         float** bt = transpose(b, MATRIX_ROWS, MATRIX_COLS);
         for (int i = 1; i < size; i++) {
-            MPI_Send(a + (i - 1) * chunk_size, chunk_size, MPI_FLOAT, i, 99, MPI_COMM_WORLD);
-            MPI_Send(bt + (i - 1) * chunk_size, chunk_size, MPI_FLOAT, i, 99, MPI_COMM_WORLD);
+            MPI_Send(*a + (i - 1) * chunk_size, chunk_size, MPI_FLOAT, i, 99, MPI_COMM_WORLD);
+            MPI_Send(*bt + (i - 1) * chunk_size, chunk_size, MPI_FLOAT, i, 99, MPI_COMM_WORLD);
         }
 
         for (int i = 1; i < size; i++) {
-            MPI_Recv(c + (i - 1) * chunk_size, chunk_size, MPI_FLOAT, i, 99, MPI_COMM_WORLD, &status);
+            MPI_Recv(*c + (i - 1) * chunk_size, chunk_size, MPI_FLOAT, i, 99, MPI_COMM_WORLD, &status);
         }
 
         // c. transpose. Too difficult and meaningless

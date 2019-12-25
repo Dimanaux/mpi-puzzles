@@ -14,7 +14,7 @@ int main(int argc, int **argv)
     MPI_Init(&argc, &argv);
     MPI_Comm_size(MPI_COMM_WORLD, &size);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
- 
+
     int chunk_size = ARRAY_SIZE / (size - 1);
     bool remains = (size - 1) * chunk_size == ARRAY_SIZE;
     MPI_Status status;
@@ -26,56 +26,46 @@ int main(int argc, int **argv)
         float *z = new float[ARRAY_SIZE];
 
         // a) z = Ax + By
-        for (int i = 1; i < size; i++)
-        {
+        for (int i = 1; i < size; i++) {
             MPI_Send(x + (i - 1) * chunk_size, chunk_size, MPI_FLOAT, i, 99, MPI_COMM_WORLD);
             MPI_Send(y + (i - 1) * chunk_size, chunk_size, MPI_FLOAT, i, 99, MPI_COMM_WORLD);
         }
 
-        for (int i = 1; i < size; i++)
-        {
+        for (int i = 1; i < size; i++) {
             MPI_Recv(z + (i - 1) * chunk_size, chunk_size, MPI_FLOAT, i, 99, MPI_COMM_WORLD, &status);
         }
 
         // b) y = Ax + By
-        for (int i = 1; i < size; i++)
-        {
+        for (int i = 1; i < size; i++) {
             MPI_Send(x + (i - 1) * chunk_size, chunk_size, MPI_FLOAT, i, 99, MPI_COMM_WORLD);
             MPI_Send(y + (i - 1) * chunk_size, chunk_size, MPI_FLOAT, i, 99, MPI_COMM_WORLD);
         }
 
-        for (int i = 1; i < size; i++)
-        {
+        for (int i = 1; i < size; i++) {
             MPI_Recv(y + (i - 1) * chunk_size, chunk_size, MPI_FLOAT, i, 99, MPI_COMM_WORLD, &status);
         }
 
         // c) z = x * y
-        for (int i = 1; i < size; i++)
-        {
+        for (int i = 1; i < size; i++) {
             MPI_Send(x + (i - 1) * chunk_size, chunk_size, MPI_FLOAT, i, 99, MPI_COMM_WORLD);
             MPI_Send(y + (i - 1) * chunk_size, chunk_size, MPI_FLOAT, i, 99, MPI_COMM_WORLD);
         }
 
-        for (int i = 1; i < size; i++)
-        {
+        for (int i = 1; i < size; i++) {
             MPI_Recv(z + (i - 1) * chunk_size, chunk_size, MPI_FLOAT, i, 99, MPI_COMM_WORLD, &status);
         }
 
         // d) x <-> y
-        for (int i = 1; i < size; i++)
-        {
+        for (int i = 1; i < size; i++) {
             MPI_Send(x + (i - 1) * chunk_size, chunk_size, MPI_FLOAT, i, 99, MPI_COMM_WORLD);
             MPI_Send(y + (i - 1) * chunk_size, chunk_size, MPI_FLOAT, i, 99, MPI_COMM_WORLD);
         }
 
-        for (int i = 1; i < size; i++)
-        {
+        for (int i = 1; i < size; i++) {
             MPI_Recv(x + (i - 1) * chunk_size, chunk_size, MPI_FLOAT, i, 99, MPI_COMM_WORLD, &status);
             MPI_Recv(y + (i - 1) * chunk_size, chunk_size, MPI_FLOAT, i, 99, MPI_COMM_WORLD, &status);
         }
-    }
-    else if (size > 1)
-    {
+    } else if (size > 1) {
         float *x = new float[chunk_size];
         float *y = new float[chunk_size];
         float *z = new float[chunk_size];
@@ -99,7 +89,7 @@ int main(int argc, int **argv)
            y[i] = A * x[i] + B * y[i];
         }
         MPI_Send(y, chunk_size, MPI_FLOAT, 0, 99, MPI_COMM_WORLD);
- 
+
         // c) z = x * y
         MPI_Recv(x, chunk_size, MPI_FLOAT, 0, 99, MPI_COMM_WORLD, &status);
         MPI_Recv(y, chunk_size, MPI_FLOAT, 0, 99, MPI_COMM_WORLD, &status);
